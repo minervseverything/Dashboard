@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MinerVsEverything — 1THz vs Absurd Odds</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="MinerVsEverything — a satirical channel pitting a 1THz miner vs wildly improbable events. Live, visual simulations and probability comparisons." />
+</head>
+<body>
+  <header class="hero">
+    <div class="banner" aria-hidden="true"></div>
+    <div class="topbar">
+      <div class="brand">
+        <img class="dp" src="assets/dp.png" alt="MinerVsEverything DP" />
+        <div class="brand-text">
+          <h1>MinerVsEverything</h1>
+          <p class="tag">1THz Solo Miner vs Everything</p>
+        </div>
+      </div>
+      <nav class="actions">
+        <a class="yt-btn" href="https://www.youtube.com/@MinerVsEverything" target="_blank" rel="noopener noreferrer">
+          ▶ Watch on YouTube
+        </a>
+        <div id="visitor" class="visitor">Visitors: <span id="visitorCount">—</span></div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <h2>Absurd Computations — Visualized</h2>
+      <p>
+        Live experiments comparing bizarre random events to the odds of a 1TH/s miner finding a block.
+        Adjust the miner/network assumptions below if you want different comparisons.
+      </p>
+
+      <div class="settings">
+        <label>Miner hash rate:
+          <input id="minerHash" type="number" value="1" min="0.000001" step="0.001" />
+          <select id="minerUnit">
+            <option value="1e12">TH/s</option>
+            <option value="1e9">GH/s</option>
+            <option value="1e6">MH/s</option>
+            <option value="1e3">KH/s</option>
+          </select>
+        </label>
+        <label>Network hash rate (ExaH/s):
+          <input id="networkHash" type="number" value="400" step="1" /> EH/s
+        </label>
+        <button id="applySettings">Apply</button>
+        <small class="note">Defaults approximate a busy network (change to experiment).</small>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card" id="uuid-card">
+        <h3>UUID Collision</h3>
+        <p class="desc">What's the chance two random v4 UUIDs are identical?</p>
+        <div class="visual" id="uuid-visual">
+          <canvas id="uuid-canvas"></canvas>
+          <div class="info">
+            <div>Probability: <span id="uuid-prob">…</span></div>
+            <div>Compared to miner: <span id="uuid-compare">…</span></div>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="uuid-simulate">Animate Simulation</button>
+          <button id="uuid-run">Run Monte Carlo (10k)</button>
+          <div id="uuid-result" class="result"></div>
+        </div>
+      </article>
+
+      <article class="card" id="deck-card">
+        <h3>Two Decks — Same Order</h3>
+        <p class="desc">Probability that two independent 52-card shuffles produce the exact same sequence.</p>
+        <div class="visual" id="deck-visual">
+          <canvas id="deck-canvas"></canvas>
+          <div class="info">
+            <div>Probability: <span id="deck-prob">…</span></div>
+            <div>Compared to miner: <span id="deck-compare">…</span></div>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="deck-simulate">Shuffle Animation</button>
+          <button id="deck-run">Run Monte Carlo (1k)</button>
+          <div id="deck-result" class="result"></div>
+        </div>
+      </article>
+
+      <article class="card" id="lorem-card">
+        <h3>Random Lorem Ipsum Exact Match</h3>
+        <p class="desc">Chance of randomly producing the standard Lorem Ipsum paragraph by typing letters uniformly at random.</p>
+        <div class="visual" id="lorem-visual">
+          <canvas id="lorem-canvas"></canvas>
+          <div class="info">
+            <div>Probability: <span id="lorem-prob">…</span></div>
+            <div>Compared to miner: <span id="lorem-compare">…</span></div>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="lorem-simulate">Type Simulation</button>
+          <button id="lorem-run">Estimate by Log Math</button>
+          <div id="lorem-result" class="result"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="explain">
+      <h3>How comparison works</h3>
+      <p>
+        We compute an event probability P_event and compare it to a miner's per-block chance:
+        P_miner = miner_hash_rate / (network_hash_rate_in_Hps). For network hash rate we use the "EH/s" value you provided
+        (1 EH/s = 10^18 hashes/sec) and assume a block occurs every 600 seconds (Bitcoin-like).
+      </p>
+      <p class="small">All computations are approximate and intended for satirical/educational demonstration.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="left">
+        <small>Copyright © <span id="year"></span> ManVsEverything</small>
+      </div>
+      <div class="right">
+        <small>Built for MinerVsEverything — host on GitHub Pages</small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

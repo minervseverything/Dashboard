@@ -24,7 +24,7 @@ body{
 /* Hero and topbar */
 .hero{position:relative;padding-bottom:10px}
 .banner{
-  background-image: url('assets/banner.svg');
+  background-image: url('assets/banner.png');
   background-size:cover;
   background-position:center;
   height:220px;

@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MinerVsEverything — 1THz vs Absurd Odds</title>
+  <!-- Google font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <meta name="description" content="MinerVsEverything — a satirical channel pitting a 1THz miner vs wildly improbable events. Live, visual simulations and probability comparisons." />
 </head>
@@ -28,57 +30,53 @@
   </header>
 
   <main class="container">
-    <!-- Intro removed per request -->
-
     <section class="grid">
       <!-- UUID Card -->
       <article class="card" id="uuid-card">
-        <h3>UUID Collision (running)</h3>
+        <h3>UUID Collision</h3>
         <p class="desc">Two random v4 UUIDs printed like a type machine; counts attempts and matches.</p>
-        <div class="visual uuid-visual">
+        <div class="visual uuid-visual center">
           <div class="uuid-display">
             <pre id="uuid-a" class="mono typewriter"></pre>
             <pre id="uuid-b" class="mono typewriter"></pre>
           </div>
-          <div class="info">
-            <div>Attempts: <span id="uuid-attempts">0</span></div>
-            <div>Matches: <span id="uuid-matches">0</span></div>
-            <div id="uuid-result" class="result"></div>
-          </div>
+        </div>
+        <div class="info bottom-info center">
+          <div>Attempts: <span id="uuid-attempts">0</span></div>
+          <div>Matches: <span id="uuid-matches">0</span></div>
+          <div id="uuid-result" class="result"></div>
         </div>
       </article>
 
       <!-- Deck Card -->
       <article class="card" id="deck-card">
-        <h3>Deck Shuffle Matching (running)</h3>
+        <h3>Deck Shuffle Matching</h3>
         <p class="desc">Two shuffles are animated as two rows of cards stacking; compares positions after 52 cards.</p>
-        <div class="visual deck-visual">
+        <div class="visual deck-visual center">
           <canvas id="deck-canvas"></canvas>
-          <div class="info">
-            <div>Attempts: <span id="deck-attempts">0</span></div>
-            <div>Last match count: <span id="deck-last-matches">0</span></div>
-            <div id="deck-result" class="result"></div>
-          </div>
+        </div>
+        <div class="info bottom-info center">
+          <div>Attempts: <span id="deck-attempts">0</span></div>
+          <div>Last match count: <span id="deck-last-matches">0</span></div>
+          <div id="deck-result" class="result"></div>
         </div>
       </article>
 
       <!-- Lorem Card -->
       <article class="card" id="lorem-card">
-        <h3>Random Typing vs Lorem Ipsum (running)</h3>
+        <h3>Random Typing vs Lorem Ipsum</h3>
         <p class="desc">Typewriter typing attempts are made continuously; each attempt checks exact match to the paragraph.</p>
-        <div class="visual lorem-visual">
+        <div class="visual lorem-visual center">
           <div class="lorem-display mono" id="lorem-display"></div>
-          <div class="info">
-            <div>Attempts: <span id="lorem-attempts">0</span></div>
-            <div>Matches: <span id="lorem-matches">0</span></div>
-            <div id="lorem-result" class="result"></div>
-          </div>
+        </div>
+        <div class="info bottom-info center">
+          <div>Attempts: <span id="lorem-attempts">0</span></div>
+          <div>Matches: <span id="lorem-matches">0</span></div>
+          <div id="lorem-percent">Match %: <span id="lorem-percent-val">0%</span></div>
+          <div id="lorem-result" class="result"></div>
         </div>
       </article>
     </section>
-
-    <!-- "How comparison works" removed per request -->
-
   </main>
 
   <footer class="site-footer">

@@ -1,4 +1,4 @@
-// Tweak script.js: slower timings, deck labels with suits, centered visuals, delayed attempts increment, lorem match %.
+// Tweak script.js: slower timings, deck labels with suits, centered visuals, delayed attempts increment, lorem match %, cards in 3 stacks and highlight matches
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -53,7 +53,7 @@ async function startUUIDLoop(){
     for(let i=0;i<b.length;i++){ bEl.textContent += b[i]; await sleep(charDelay); }
 
     // compute result
-    if(a===b){ matches++; matchesEl.textContent = matches; resultEl.textContent = 'MATCH!'; resultEl.style.color = '#ffd54f'; }
+    if(a===b){ matches++; matchesEl.textContent = matches; resultEl.textContent = 'MATCH!'; resultEl.style.color = '#57b56e'; }
     else { resultEl.textContent = 'No match'; resultEl.style.color = '#cfeee6'; }
 
     // wait, then increment attempts
@@ -67,7 +67,6 @@ async function startUUIDLoop(){
 }
 
 /* ---------------- Deck ---------------- */
-// map index 0..51 to rank+suit (♣♦♥♠) - using standard order clubs, diamonds, hearts, spades
 const SUITS = ['♣','♦','♥','♠'];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 function cardLabel(index){
@@ -91,40 +90,36 @@ async function startDeckLoop(){
   const DPR = window.devicePixelRatio || 1;
   function resize(){
     const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * DPR;
-    canvas.height = rect.height * DPR;
+    // compute height needed for 2 decks x 3 rows
+    const rows = 3; const cardH = 46; const gap = 12; const padding = 12; const totalHeight = padding + rows*(cardH+gap) + 16 + rows*(cardH+gap) + padding;
+    canvas.width = Math.max(rect.width, 320) * DPR;
+    canvas.height = Math.max(totalHeight, rect.height) * DPR;
     canvas.style.width = rect.width + 'px';
-    canvas.style.height = rect.height + 'px';
+    canvas.style.height = (canvas.height/DPR) + 'px';
   }
   resize(); window.addEventListener('resize', resize);
   const ctx = canvas.getContext('2d');
   ctx.scale(DPR, DPR);
 
   const postRunWait = 1000;
-  const perCardDelay = 140; // slower for stream
+  const perCardDelay = 240; // slower for stream
 
   function clearCanvas(){ ctx.clearRect(0,0,canvas.width/DPR,canvas.height/DPR); }
 
-  function drawCardFace(x,y,w,h,rank,suit,color){
-    // face
-    roundRect(ctx,x,y,w,h,8,true,true);
-    // rank and suit
-    ctx.fillStyle = color==='red' ? '#c62828' : '#081018';
-    ctx.font = '14px ui-monospace, monospace';
-    ctx.textBaseline = 'middle';
-    // small top-left
-    ctx.fillText(rank + suit, x + 8, y + 12 + 2);
-    // centered big label
-    ctx.font = '16px ui-monospace, monospace';
-    ctx.fillText(rank + suit, x + w/2 - (rank.length>1?14:6), y + h/2 + 4);
-  }
-
   function roundRect(ctx,x,y,w,h,r,fill,stroke){ if(!r)r=6; ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); if(fill){ ctx.fillStyle='#ffffff'; ctx.fill(); } if(stroke){ ctx.strokeStyle='rgba(0,0,0,0.08)'; ctx.lineWidth=1; ctx.stroke(); } }
 
-  function drawBackground(){
-    ctx.clearRect(0,0,canvas.width/DPR,canvas.height/DPR);
-    ctx.fillStyle = 'rgba(0,0,0,0.02)'; ctx.fillRect(0,0,canvas.width/DPR,canvas.height/DPR);
+  function drawCardFace(x,y,w,h,rank,suit,color){
+    roundRect(ctx,x,y,w,h,8,true,true);
+    ctx.fillStyle = color==='red' ? '#c62828' : '#081018';
+    ctx.font = '16px ui-monospace, monospace';
+    ctx.textBaseline = 'middle';
+    // centered label only
+    const text = rank + suit;
+    const textWidth = ctx.measureText(text).width;
+    ctx.fillText(text, x + (w - textWidth)/2, y + h/2 + 4);
   }
+
+  function drawHighlight(x,y,w,h){ ctx.strokeStyle = '#57b56e'; ctx.lineWidth = 3; ctx.strokeRect(x-2,y-2,w+4,h+4); }
 
   let attempts=0;
   while(true){
@@ -134,36 +129,48 @@ async function startDeckLoop(){
 
       // layout calculations
       const rect = canvas.getBoundingClientRect();
-      const W = rect.width; const H = rect.height;
-      const padding = 10;
-      const cols = 13;
-      const cardW = Math.min(56, (W - padding*2) / cols - 6);
-      const cardH = 40;
+      const W = rect.width; const padding = 12;
+      const rows = 3;
+      const cols = Math.ceil(52/rows); // 18
+      const cardW = Math.min(48, (W - padding*2) / cols - 6);
+      const cardH = 46;
       const spacingX = cardW + 6;
-      const rowY1 = 12;
-      const rowY2 = rowY1 + cardH + 12;
+      const gapY = 12;
+      const deck1Y = 12;
+      const deck2Y = deck1Y + rows*(cardH+gapY) + 18;
 
-      drawBackground();
-      // draw all cards progressively but keep previous ones visible
+      clearCanvas();
+      // draw progressive but keep visible
       for(let i=0;i<52;i++){
-        const col = i % cols;
-        const x = padding + col * spacingX;
-        // draw for deck1
+        const r = Math.floor(i/cols);
+        const c = i % cols;
+        const x = padding + c * spacingX;
+        // deck1
+        const y1 = deck1Y + r * (cardH + gapY);
         const c1 = cardLabel(d1[i]);
-        ctx.save();
-        drawCardFace(x, rowY1, cardW, cardH, c1.label, c1.suit, c1.color);
-        ctx.restore();
-        // draw for deck2
+        drawCardFace(x, y1, cardW, cardH, c1.label, c1.suit, c1.color);
+        // deck2
+        const y2 = deck2Y + r * (cardH + gapY);
         const c2 = cardLabel(d2[i]);
-        ctx.save();
-        drawCardFace(x, rowY2, cardW, cardH, c2.label, c2.suit, c2.color);
-        ctx.restore();
-        await sleep(perCardDelay + Math.random()*20);
+        drawCardFace(x, y2, cardW, cardH, c2.label, c2.suit, c2.color);
+        await sleep(perCardDelay + Math.random()*40);
       }
 
-      // compare
-      let matches=0;
-      for(let i=0;i<52;i++){ if(d1[i]===d2[i]) matches++; }
+      // compare and highlight matches
+      let matches = 0;
+      for(let i=0;i<52;i++){
+        if(d1[i] === d2[i]){
+          matches++;
+          const r = Math.floor(i/cols);
+          const c = i % cols;
+          const x = padding + c * spacingX;
+          const y1 = deck1Y + r * (cardH + gapY);
+          const y2 = deck2Y + r * (cardH + gapY);
+          // highlight both
+          drawHighlight(x, y1, cardW, cardH);
+          drawHighlight(x, y2, cardW, cardH);
+        }
+      }
       lastMatchesEl.textContent = matches;
       resultEl.textContent = matches===52 ? 'FULL MATCH! (inconceivable!)' : `${matches} positional matches`;
 
@@ -190,8 +197,9 @@ async function startLoremLoop(){
   const percentEl = document.getElementById('lorem-percent-val');
   const resultEl = document.getElementById('lorem-result');
 
-  const alphabet = "abcdefghijklmnopqrstuvwxyz ,.!?;:'\"-()".split('');
-  const charDelay = 12;
+  // alphabets only (lowercase)
+  const alphabet = "abcdefghijklmnopqrstuvwxyz".split('');
+  const charDelay = 30; // slower
   const postRunWait = 1000;
 
   let attempts = 0, matches = 0;

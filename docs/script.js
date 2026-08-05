@@ -37,7 +37,7 @@ async function startUUIDLoop(){
   const resultEl = document.getElementById('uuid-result');
 
   let attempts=0, matches=0;
-  const charDelay = 60; // slower typing for streams
+  const charDelay = 100; // slower typing for streams
   const postRunWait = 1000; // 1s pause before attempts increment
 
   async function runOnce(){
@@ -102,7 +102,7 @@ async function startDeckLoop(){
   ctx.scale(DPR, DPR);
 
   const postRunWait = 1000;
-  const perCardDelay = 240; // slower for stream
+  const perCardDelay = 450; // slower for stream
 
   function clearCanvas(){ ctx.clearRect(0,0,canvas.width/DPR,canvas.height/DPR); }
 
@@ -198,8 +198,8 @@ async function startLoremLoop(){
   const resultEl = document.getElementById('lorem-result');
 
   // alphabets only (lowercase)
-  const alphabet = "abcdefghijklmnopqrstuvwxyz".split('');
-  const charDelay = 30; // slower
+  const alphabet = "abcdefghijklmnopqrstuvwxyz     ".split('');
+  const charDelay = 100; // slower
   const postRunWait = 1000;
 
   let attempts = 0, matches = 0;

@@ -28,93 +28,57 @@
   </header>
 
   <main class="container">
-    <section class="intro">
-      <h2>Absurd Computations — Visualized</h2>
-      <p>
-        Live experiments comparing bizarre random events to the odds of a 1TH/s miner finding a block.
-        Adjust the miner/network assumptions below if you want different comparisons.
-      </p>
-
-      <div class="settings">
-        <label>Miner hash rate:
-          <input id="minerHash" type="number" value="1" min="0.000001" step="0.001" />
-          <select id="minerUnit">
-            <option value="1e12">TH/s</option>
-            <option value="1e9">GH/s</option>
-            <option value="1e6">MH/s</option>
-            <option value="1e3">KH/s</option>
-          </select>
-        </label>
-        <label>Network hash rate (ExaH/s):
-          <input id="networkHash" type="number" value="400" step="1" /> EH/s
-        </label>
-        <button id="applySettings">Apply</button>
-        <small class="note">Defaults approximate a busy network (change to experiment).</small>
-      </div>
-    </section>
+    <!-- Intro removed per request -->
 
     <section class="grid">
+      <!-- UUID Card -->
       <article class="card" id="uuid-card">
-        <h3>UUID Collision</h3>
-        <p class="desc">What's the chance two random v4 UUIDs are identical?</p>
-        <div class="visual" id="uuid-visual">
-          <canvas id="uuid-canvas"></canvas>
-          <div class="info">
-            <div>Probability: <span id="uuid-prob">…</span></div>
-            <div>Compared to miner: <span id="uuid-compare">…</span></div>
+        <h3>UUID Collision (running)</h3>
+        <p class="desc">Two random v4 UUIDs printed like a type machine; counts attempts and matches.</p>
+        <div class="visual uuid-visual">
+          <div class="uuid-display">
+            <pre id="uuid-a" class="mono typewriter"></pre>
+            <pre id="uuid-b" class="mono typewriter"></pre>
           </div>
-        </div>
-        <div class="controls">
-          <button id="uuid-simulate">Animate Simulation</button>
-          <button id="uuid-run">Run Monte Carlo (10k)</button>
-          <div id="uuid-result" class="result"></div>
+          <div class="info">
+            <div>Attempts: <span id="uuid-attempts">0</span></div>
+            <div>Matches: <span id="uuid-matches">0</span></div>
+            <div id="uuid-result" class="result"></div>
+          </div>
         </div>
       </article>
 
+      <!-- Deck Card -->
       <article class="card" id="deck-card">
-        <h3>Two Decks — Same Order</h3>
-        <p class="desc">Probability that two independent 52-card shuffles produce the exact same sequence.</p>
-        <div class="visual" id="deck-visual">
+        <h3>Deck Shuffle Matching (running)</h3>
+        <p class="desc">Two shuffles are animated as two rows of cards stacking; compares positions after 52 cards.</p>
+        <div class="visual deck-visual">
           <canvas id="deck-canvas"></canvas>
           <div class="info">
-            <div>Probability: <span id="deck-prob">…</span></div>
-            <div>Compared to miner: <span id="deck-compare">…</span></div>
+            <div>Attempts: <span id="deck-attempts">0</span></div>
+            <div>Last match count: <span id="deck-last-matches">0</span></div>
+            <div id="deck-result" class="result"></div>
           </div>
-        </div>
-        <div class="controls">
-          <button id="deck-simulate">Shuffle Animation</button>
-          <button id="deck-run">Run Monte Carlo (1k)</button>
-          <div id="deck-result" class="result"></div>
         </div>
       </article>
 
+      <!-- Lorem Card -->
       <article class="card" id="lorem-card">
-        <h3>Random Lorem Ipsum Exact Match</h3>
-        <p class="desc">Chance of randomly producing the standard Lorem Ipsum paragraph by typing letters uniformly at random.</p>
-        <div class="visual" id="lorem-visual">
-          <canvas id="lorem-canvas"></canvas>
+        <h3>Random Typing vs Lorem Ipsum (running)</h3>
+        <p class="desc">Typewriter typing attempts are made continuously; each attempt checks exact match to the paragraph.</p>
+        <div class="visual lorem-visual">
+          <div class="lorem-display mono" id="lorem-display"></div>
           <div class="info">
-            <div>Probability: <span id="lorem-prob">…</span></div>
-            <div>Compared to miner: <span id="lorem-compare">…</span></div>
+            <div>Attempts: <span id="lorem-attempts">0</span></div>
+            <div>Matches: <span id="lorem-matches">0</span></div>
+            <div id="lorem-result" class="result"></div>
           </div>
-        </div>
-        <div class="controls">
-          <button id="lorem-simulate">Type Simulation</button>
-          <button id="lorem-run">Estimate by Log Math</button>
-          <div id="lorem-result" class="result"></div>
         </div>
       </article>
     </section>
 
-    <section class="explain">
-      <h3>How comparison works</h3>
-      <p>
-        We compute an event probability P_event and compare it to a miner's per-block chance:
-        P_miner = miner_hash_rate / (network_hash_rate_in_Hps). For network hash rate we use the "EH/s" value you provided
-        (1 EH/s = 10^18 hashes/sec) and assume a block occurs every 600 seconds (Bitcoin-like).
-      </p>
-      <p class="small">All computations are approximate and intended for satirical/educational demonstration.</p>
-    </section>
+    <!-- "How comparison works" removed per request -->
+
   </main>
 
   <footer class="site-footer">
